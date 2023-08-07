@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="MemberMapper">
+<!-- 	컬럼명과 필드명이 달라서 함 -->
+	<resultMap type="com.kh.member.model.vo.Member" id="memberResultMap">
+		<id property="memberId" 		column="MEMBER_ID" />
+		<result property="memberPw" 	column="MEMBER_PW" />
+		<result property="memberName" 	column="MEMBER_NAME" />
+		<result property="memberAge" 	column="MEMBER_AGE" />
+		<result property="memberGender" column="MEMBER_GENDER" />
+		<result property="memberEmail" 	column="MEMBER_EMAIL" />
+		<result property="memberPhone" 	column="MEMBER_PHONE" />
+		<result property="memberAddr" 	column="MEMBER_ADDRESS" />
+		<result property="memberHobby" 	column="MEMBER_HOBBY" />
+		<result property="memberDate" 	column="MEMBER_DATE" />
+		<result property="updateDate" 	column="UPDATE_DATE" />
+		<result property="memberYn" 	column="MEMBER_YN" />
+	</resultMap>
+	
+<!-- 여러개의 인서트 태그를 구분하기 위해 아이디 부여함 (DAO에 있는 메소드 명과 같게 하면 덜 헷갈림) -->
+<!-- 	#{필드에 있는 값 그대로} = member.getmemberId -->
+<!--  생략 가능 parameterType="com.kh.member.model.vo.Member"  -->
+	<insert id="insertMember">	
+		INSERT INTO MEMBER_TBL VALUES(#{memberId },#{memberPw },#{memberName },#{memberAge },#{memberGender },#{memberEmail },#{memberPhone },#{memberAddr },#{memberHobby },DEFAULT,DEFAULT,DEFAULT)
+	</insert>
+	
+	<delete id="deleteMember">
+<!-- 		DELETE FROM MEMBER_TBL WHERE MEMBER_ID = #{value }도 가능! -->
+		DELETE FROM MEMBER_TBL WHERE MEMBER_ID = #{memberId }
+	</delete>
+	
+	<update id="updateMember">
+		UPDATE MEMBER_TBL SET MEMBER_PW = #{memberPw }, MEMBER_EMAIL = #{memberEmail }, MEMBER_PHONE = #{memberPhone }, MEMBER_ADDRESS = #{memberAddr }, MEMBER_HOBBY = #{memberHobby } WHERE MEMBER_ID = #{memberId }
+	</update>
+	
+<!--  	생략 가능 parameterType="com.kh.member.model.vo.Member"  -->
+<!-- 	컬럼명과 필드명이 같을 때 사용, resultType="com.kh.member.model.vo.Member" -->
+	<select id="selectCheckLogin" resultMap="memberResultMap">
+		SELECT * FROM MEMBER_TBL WHERE MEMBER_ID = #{memberId } AND MEMBER_PW = #{memberPw }
+	</select>
+	
+	<select id="selectOneById" resultMap="memberResultMap">
+		SELECT * FROM MEMBER_TBL WHERE MEMBER_ID = #{memberId }
+	</select>
+</mapper>
